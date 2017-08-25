@@ -37,7 +37,6 @@ else:
 
 # DEAR STUDENT: you might want to experiment with number of batches
 batches = 100
-batch_size = len(data)/batches
 
 print "Done."
 
@@ -57,21 +56,23 @@ def prob_given_x(x, coefficients):
 def gradient(x, y, coefficients, j):
     h = prob_given_x(x, coefficients)
     xj = x[:, j]
-    return np.mean(np.dot(np.subtract(h, y), xj))
+    grad = np.dot(np.subtract(h, y), xj)/len(x)
+    return grad
 
 # initial coefficient vector
 coefs = [0.0]*lastcol
 
 # learning rate
-learning_rate = 0.0001
+learning_rate = 0.005
 
+batch_size = len(x)/batches
 
 for iteration in range(500):
     # DEAR STUDENT: basically parallellize this loop
     for j in range(batches):
         subset_x = x[j*batch_size:(j+1)*batch_size, :]
         subset_y = y[j*batch_size:(j+1)*batch_size]
-        
+
         for i in range(lastcol):
             coefs[i] = coefs[i] - learning_rate*gradient(subset_x, subset_y, coefs, i)
 
